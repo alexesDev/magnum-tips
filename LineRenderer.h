@@ -21,11 +21,13 @@ class LineRendererOptions {
 
     LineRendererOptions &setTo(const Magnum::Vector3& to) {
       _to = to;
+      _dirty = true;
       return *this;
     }
 
     LineRendererOptions &setFrom(const Magnum::Vector3& from) {
       _from = from;
+      _dirty = true;
       return *this;
     }
 

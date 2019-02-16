@@ -43,6 +43,7 @@ Matrix4 LineRendererOptions::transformation() {
   if (_dirty) {
     Float len = (_to - _from).length();
     _transformation = Matrix4::lookAt(_from, _to, Vector3::yAxis(1)) * Matrix4::scaling(Vector3(len));
+    _dirty = false;
   }
 
   return _transformation;
