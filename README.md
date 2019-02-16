@@ -62,3 +62,20 @@ _camera->draw(_debugDrawables);
 ```
 
 ![GridRenderer](https://raw.githubusercontent.com/alexesDev/magnum-tips/master/GridRenderer.png)
+
+### MathUtils
+
+getCameraToViewportRay:
+
+```cpp
+Vector2 screenPoint = Vector2{_mousePosition} / Vector2{windowSize()};
+Ray cameraRay = getCameraToViewportRay(_cameraController->camera(), screenPoint);
+
+Vector4 ground = Math::planeEquation(Vector3{0, 1, 0}, Vector3(0));
+Float t = Math::Intersection::planeLine(ground, cameraRay.origin, cameraRay.direction);
+
+if (!Magnum::Math::isInf(t) && !Magnum::Math::isNan(t)) {
+  Vector3 point = cameraRay.origin + cameraRay.direction * t;
+  _line->setTo(point);
+}
+```
