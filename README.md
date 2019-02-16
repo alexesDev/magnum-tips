@@ -1,5 +1,21 @@
 # Magnum tips
 
+### LineRenderer
+
+```cpp
+_lineRenderer = new LineRenderer{_scene, &_debugDrawables};
+
+// static lines (from, to, color)
+_lineRenderer->add({ 0, 0, 0 }, { 1, 1, 1 }, { 1, 0, 0 });
+_lineRenderer->add({ -1, 2, 0 }, { 1, 1, 1 }, { 0, 1, 0 });
+
+// dynamic line
+auto line = _lineRenderer->add({ 0, 0, 0 }, { 1, 1, 1 });
+line->setTo({ -1, 2, 0 });
+```
+
+![LineRenderer](https://raw.githubusercontent.com/alexesDev/magnum-tips/master/LineRenderer.gif)
+
 ### ThirdPersonCameraController
 
 ```cpp
