@@ -5,7 +5,8 @@
 
 using namespace Magnum;
 
-constexpr std::array<Vector3, 1> positions{{
+constexpr std::array<Vector3, 2> positions{{
+  { 0, 0, 0 },
   { 0, 0, -1.f }
 }};
 
