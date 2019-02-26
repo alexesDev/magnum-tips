@@ -15,18 +15,16 @@ LineRenderer::LineRenderer(Object3D& object, Magnum::SceneGraph::DrawableGroup3D
   if(!_shader) DebugTools::ResourceManager::instance().set<GL::AbstractShaderProgram>(_shader.key(), new Shaders::Flat3D);
 
   _mesh = DebugTools::ResourceManager::instance().get<GL::Mesh>("my-line");
-  _vertexBuffer = DebugTools::ResourceManager::instance().get<GL::Buffer>("my-line-vertices");
   if(_mesh) return;
 
-  GL::Buffer* vertexBuffer = new GL::Buffer{GL::Buffer::TargetHint::Array};
   GL::Mesh* mesh = new GL::Mesh;
 
-  vertexBuffer->setData(positions, GL::BufferUsage::StaticDraw);
-  DebugTools::ResourceManager::instance().set(_vertexBuffer.key(), vertexBuffer, ResourceDataState::Final, ResourcePolicy::Manual);
+  GL::Buffer vertexBuffer{GL::Buffer::TargetHint::Array};
+  vertexBuffer.setData(positions, GL::BufferUsage::StaticDraw);
 
   mesh->setPrimitive(GL::MeshPrimitive::Lines)
       .setCount(2)
-      .addVertexBuffer(*vertexBuffer, 0, Shaders::Flat3D::Position{});
+      .addVertexBuffer(std::move(vertexBuffer), 0, Shaders::Flat3D::Position{});
 
   DebugTools::ResourceManager::instance().set<GL::Mesh>(_mesh.key(), mesh, ResourceDataState::Final, ResourcePolicy::Manual);
 }
