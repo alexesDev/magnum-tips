@@ -1,5 +1,44 @@
 # Magnum tips
 
+### TranslateController
+
+```cpp
+// init
+*_translateController = new TranslateController{&_scene, &_debugDrawables};
+
+// controller only works if it has children
+Object3D *cube = new Object3D{_translateController};
+new CubeDrawable{*_cube, &_drawables};
+
+// disable controller
+cube->setParent(&_scene);
+
+// handle mouse events
+void MyApplication::mouseMoveEvent(MouseMoveEvent& event) {
+  Vector2 screenPoint = Vector2{event.position()} / Vector2{windowSize()};
+  Ray cameraRay = getCameraToViewportRay(*_camera, screenPoint);
+
+  _translateController->move(cameraRay);
+}
+
+void MyApplication::mousePressEvent(MouseEvent& event) {
+  if (event.button() == MouseEvent::Button::Left) {
+    Vector2 screenPoint = Vector2{event.position()} / Vector2{windowSize()};
+    Ray cameraRay = getCameraToViewportRay(*_camera, screenPoint);
+
+    _translateController->grab(cameraRay);
+  }
+}
+
+void MyApplication::mouseReleaseEvent(MouseEvent& event) {
+  if (event.button() == MouseEvent::Button::Left) {
+    _translateController->release();
+  }
+}
+```
+
+![TranslateController](https://raw.githubusercontent.com/alexesDev/magnum-tips/master/TranslateController.gif)
+
 ### LineRenderer
 
 ```cpp
