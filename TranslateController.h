@@ -1,7 +1,6 @@
 #ifndef TranslateController_h
 #define TranslateController_h
 
-#include <Magnum/DebugTools/ObjectRenderer.h>
 #include <Magnum/SceneGraph/Drawable.h>
 
 #include <Types.h>
