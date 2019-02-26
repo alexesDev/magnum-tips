@@ -24,10 +24,9 @@ GridRenderer::GridRenderer(Object3D& object, Magnum::SceneGraph::DrawableGroup3D
   if(!_shader) DebugTools::ResourceManager::instance().set<GL::AbstractShaderProgram>(_shader.key(), new Shaders::VertexColor3D);
 
   _mesh = DebugTools::ResourceManager::instance().get<GL::Mesh>("grid");
-  _vertexBuffer = DebugTools::ResourceManager::instance().get<GL::Buffer>("grid-vertices");
   if(_mesh) return;
 
-  GL::Buffer* vertexBuffer = new GL::Buffer{GL::Buffer::TargetHint::Array};
+  GL::Buffer vertexBuffer{GL::Buffer::TargetHint::Array};
   GL::Mesh* mesh = new GL::Mesh;
 
   struct Vertex {
@@ -53,12 +52,11 @@ GridRenderer::GridRenderer(Object3D& object, Magnum::SceneGraph::DrawableGroup3D
     data.push_back({ { i, 0, size }, getLineColor(i, baseColor, zColor, subColor) });
   }
 
-  vertexBuffer->setData(data, GL::BufferUsage::StaticDraw);
-  DebugTools::ResourceManager::instance().set(_vertexBuffer.key(), vertexBuffer, ResourceDataState::Final, ResourcePolicy::Manual);
+  vertexBuffer.setData(data, GL::BufferUsage::StaticDraw);
 
   mesh->setPrimitive(GL::MeshPrimitive::Lines)
       .setCount(data.size())
-      .addVertexBuffer(*vertexBuffer, 0, Shaders::VertexColor3D::Position{}, Shaders::VertexColor3D::Color3{});
+      .addVertexBuffer(std::move(vertexBuffer), 0, Shaders::VertexColor3D::Position{}, Shaders::VertexColor3D::Color3{});
 
   DebugTools::ResourceManager::instance().set<GL::Mesh>(_mesh.key(), mesh, ResourceDataState::Final, ResourcePolicy::Manual);
 }
