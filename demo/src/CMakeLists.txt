@@ -14,6 +14,7 @@ add_executable(MyApplication
   ../../MathUtils.cpp
   ../../TranslateController.cpp
   ../../GridRenderer.cpp
+  ../../LineRenderer.cpp
   ../../ThirdPersonCameraController.cpp
   MyApplication.cpp)
 

@@ -9,6 +9,7 @@
 
 #include <TranslateController.h>
 #include <GridRenderer.h>
+#include <LineRenderer.h>
 #include <ThirdPersonCameraController.h>
 
 #include "CubeDrawable.h"
@@ -32,6 +33,7 @@ class MyApplication: public Platform::Application {
 
     TranslateController *_translateController;
     ThirdPersonCameraController *_cameraController;
+    LineRenderer *_lineRenderer;
 
     DebugTools::ResourceManager _debugManager;
     SceneGraph::DrawableGroup3D _debugDrawables;
@@ -39,8 +41,6 @@ class MyApplication: public Platform::Application {
 
 MyApplication::MyApplication(const Arguments& arguments): Platform::Application{arguments, Configuration{}.setSize({1280,1024}), GLConfiguration{}.setSampleCount(4)} {
   GL::Renderer::enable(GL::Renderer::Feature::FaceCulling);
-
-  using namespace Math::Literals;
 
   /* Configure camera */
   _cameraController = new ThirdPersonCameraController{_scene};
@@ -57,6 +57,14 @@ MyApplication::MyApplication(const Arguments& arguments): Platform::Application{
   new CubeDrawable{*_cube, &_drawables};
 
   new GridRenderer{_scene, &_drawables};
+
+  _lineRenderer = new LineRenderer{_scene, &_debugDrawables};
+
+  // static lines (from, to, color)
+  _lineRenderer->add({ 2, 0, 2 }, { 3, 0, 3 }, { 1, 0, 0 });
+  _lineRenderer->add({ 2, 0, 2 }, { 3, 1, 3 }, { 0, 1, 0 });
+  // TODO: bug, dont use Matrix4::lookAt
+  _lineRenderer->add({ 3, 0, 3 }, { 3, 1, 3 }, { 0, 0, 1 });
 
   _timeline.start();
 }
