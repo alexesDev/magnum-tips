@@ -3,8 +3,7 @@
 ### TranslateController
 
 ```cpp
-// init
-*_translateController = new TranslateController{&_scene, &_debugDrawables};
+_translateController = new TranslateController{&_scene, &_debugDrawables};
 
 // controller only works if it has children
 Object3D *cube = new Object3D{_translateController};
