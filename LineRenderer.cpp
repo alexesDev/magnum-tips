@@ -7,7 +7,7 @@ using namespace Magnum;
 
 constexpr std::array<Vector3, 2> positions{{
   { 0, 0, 0 },
-  { 0, 0, -1.f }
+  { 0, 0, 1.f }
 }};
 
 LineRenderer::LineRenderer(Object3D& object, Magnum::SceneGraph::DrawableGroup3D* drawables) : SceneGraph::Drawable3D{object, drawables} {
@@ -41,7 +41,14 @@ void LineRenderer::draw(const Matrix4& transformationMatrix, SceneGraph::Camera3
 Matrix4 LineRendererOptions::transformation() {
   if (_dirty) {
     Float len = (_to - _from).length();
-    _transformation = Matrix4::lookAt(_from, _to, Vector3::yAxis(1)) * Matrix4::scaling(Vector3(len));
+
+    Vector3 start = Vector3::zAxis(1);
+    Vector3 dir = (_to - _from).normalized();
+
+    Vector3 right = Math::cross(start, dir).normalized();
+    Rad angle = Math::angle(start, dir);
+
+    _transformation = Matrix4::translation(_from) * Matrix4::rotation(angle, right) * Matrix4::scaling(Vector3(len));
     _dirty = false;
   }
 
