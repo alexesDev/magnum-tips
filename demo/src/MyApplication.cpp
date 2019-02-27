@@ -8,6 +8,7 @@
 #include <Magnum/DebugTools/ResourceManager.h>
 
 #include <TranslateController.h>
+#include <ScaleController.h>
 #include <GridRenderer.h>
 #include <LineRenderer.h>
 #include <ThirdPersonCameraController.h>
@@ -32,6 +33,7 @@ class MyApplication: public Platform::Application {
     Timeline _timeline;
 
     TranslateController *_translateController;
+    ScaleController *_scaleController;
     ThirdPersonCameraController *_cameraController;
     LineRenderer *_lineRenderer;
 
@@ -51,8 +53,9 @@ MyApplication::MyApplication(const Arguments& arguments): Platform::Application{
 
   /* Demo scene */
   _translateController = new TranslateController{&_scene, &_debugDrawables};
+  _scaleController = new ScaleController{&_scene, &_debugDrawables};
 
-  _cube = new Object3D{_translateController};
+  _cube = new Object3D{_scaleController};
   _cube->scale(Vector3(0.25));
   new CubeDrawable{*_cube, &_drawables};
 
@@ -95,6 +98,7 @@ void MyApplication::mouseMoveEvent(MouseMoveEvent& event) {
     Ray cameraRay = getCameraToViewportRay(_cameraController->camera(), screenPoint);
 
     _translateController->move(cameraRay);
+    _scaleController->move(cameraRay);
   }
 }
 
@@ -104,12 +108,14 @@ void MyApplication::mousePressEvent(MouseEvent& event) {
     Ray cameraRay = getCameraToViewportRay(_cameraController->camera(), screenPoint);
 
     _translateController->grab(cameraRay);
+    _scaleController->grab(cameraRay);
   }
 }
 
 void MyApplication::mouseReleaseEvent(MouseEvent& event) {
   if (event.button() == MouseEvent::Button::Left) {
     _translateController->release();
+    _scaleController->release();
   }
 }
 
